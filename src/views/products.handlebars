@@ -1,0 +1,25 @@
+<h1>Productos</h1>
+
+<div id="container">
+    <div id="productos">
+            {{#each productos}}
+                <ul data-id={{_id}}>
+                    <li><h3> {{title}}<h3></li>
+                    <li> {{description}} </li>
+                    <li>$ {{price}} </li>
+                    <li><img src={{thumbnail}} alt={{description}} width="250" > </li>
+                    <li class="codigo">Código: {{code}} </li>
+                    <li class="codigo">Id: {{_id}}</li>
+                    <li>Stock Actual {{stock}} </li>
+                    <li><button class="comprar" onclick="comprar(`{{_id}}`)">Agregar al carrito</button></li>
+                </ul>
+            {{/each}}
+    </div>
+</div>
+ {{#each carrito}}
+    <input type="text" value="{{_id}}" id="carrito" hidden />
+{{/each}}
+
+        <script src="/js/productos.js"></script>
+{{!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+ --}}

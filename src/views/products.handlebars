@@ -18,8 +18,8 @@
 </div>
  {{#each carrito}}
     <input type="text" value="{{_id}}" id="carrito" hidden />
-{{/each}}
 
-        <script src="/js/productos.js"></script>
-{{!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
- --}}
+<a href="/carrito/{{_id}}">Ir a Carrito</a>
+{{/each}}
+<script src="/js/productos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

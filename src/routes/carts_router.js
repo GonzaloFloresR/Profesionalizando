@@ -85,6 +85,61 @@ const entorno = async() => {
         
     });
 
+    router.put("/:cid", async(request, response) => {
+        let products = request.body;
+        let {cid} = request.params;  //[{productId:"x",quantity:1},{productId:"y",quantity:1},{productId:"z",quantity:1}]
+        if(!products){
+            response.setHeader('Content-Type','application/json');
+            return response.status(400).json({status:"error", error:"Debe Agregar productos al carrito"});
+        }
+        if(!isValidObjectId(cid)){
+            response.setHeader('Content-Type','application/json');
+            return response.status(400).json({status:"error", error:"Debe ingresar un Id Mongo Valido"});
+        }
+        // crear Array de pid´s recibidos para agregar
+        let pids = products.map(produ => produ.productId);
+        
+        try {
+            const carrito = await cartManager.getCarritoById({"_id":cid});
+            const ArrayCarrito = carrito.products;
+            
+            const productosPreExistentes = pids.filter(pidElement => {
+                return ArrayCarrito.some(produ => produ.productId._id == pidElement);
+            }); //recibo un array de los productos que deseo agregar y que ya existen en el carrito
+            if(productosPreExistentes == 0){
+                console.log(products,"Desde Linea 110");
+                let {...objetos} = products;
+                console.log({...objetos},"Desde Linea 112");
+                await cartManager.updateCart(cid,products);
+                
+                response.setHeader('Content-Type','application/json');
+                return response.status(200).json({status:"Productos Agregados"});
+            } else {
+                console.log("Estoy en linea 116");
+                response.setHeader('Content-Type','application/json');
+                response.status(400).json({status:"error", message:"El producto no se pudo agregar"})
+            }
+        }
+        catch(error){console.log(error.message)}
+            /* //await productManager.updateProduct(pid, {"$inc":{"stock":-cantidad}});  //Funciona
+            let agregado = await cartManager.crearCarrito({products});
+            if(agregado){
+                response.setHeader('Content-Type','application/json');
+                return response.status(200).json(agregado);
+            } else {
+                
+            }
+        } 
+        catch(error){
+            console.log(error);
+            response.setHeader('Content-Type','application/json');
+            return response.status(500).json({
+                error:"Error inesperado en el servidor - intente más tarde",
+                detalle:`${error.message}`});
+        } */
+        
+    });
+
     router.put("/:cid/products/:pid", async(request, response) => {
         let {cid,pid }= request.params
         let cantidad = request.body;
@@ -167,6 +222,68 @@ const entorno = async() => {
             catch(error){
                 console.log(error);
             }
+        }
+    });
+
+    router.delete("/:cid/products/:pid", async(request, response) => {
+        let {cid,pid }= request.params
+        let cantidad = request.body;
+        if(!cantidad || typeof cantidad != Number){
+            cantidad = 1;
+        }
+        
+        if(!isValidObjectId(cid) || !isValidObjectId(pid) ){
+            response.setHeader('Content-Type','application/json');
+            return response.status(400).json({error:"Ingrese un ID de Carrito y ID de Producto validos"});
+        } 
+        let carrito;
+        try {
+            carrito = await cartManager.getCarritoById({_id:cid});
+            if(!carrito){
+                response.setHeader('Content-Type','application/json');
+                return response.status(400).json({error:`El carrito con ID: ${cid} no existe`});
+            }
+        }
+        catch(error) {
+            console.log(error.message)
+        }
+        let producto;
+        try {
+            producto = await productManager.getProductBy({_id:pid});
+            if(!producto){
+                response.setHeader('Content-Type','application/json');
+                return response.status(400).json({error:`El producto con ID: ${pid} no existe`});
+            }
+        }
+        catch(error) {
+            console.log(error.message)
+        }
+        //Confirmado existencia de carrito y de producto
+        //Verificar si el carrito ya cuenta con el producto
+        const ProductoEnCarrito = carrito.products.find(produ => produ.productId._id == pid);
+        if(ProductoEnCarrito){
+            
+            if(ProductoEnCarrito.quantity > 1){
+                try {
+                    await productManager.updateProduct(pid, {"$inc":{"stock":cantidad}});  //Funciona
+                    ProductoEnCarrito.quantity -= cantidad;
+                }
+                catch(error){error.message}
+            } else {
+                carrito.products = carrito.products.filter(produ => produ.productId._id != pid);
+            }
+                try {
+                    let resuelto = await cartManager.updateCart(cid, carrito);
+                    if(resuelto){
+                        response.setHeader('Content-Type','application/json');
+                        return response.status(200).json({status:"succes", message:`Producto ${pid} Eliminado en carrito ${cid}`});
+                    }
+                }
+                catch(error){
+                    error.message
+                    response.setHeader('Content-Type','application/json');
+                    return response.status(400).json({status:"error", message:`Producto ${pid} no se logro agregar en carrito ${cid}`});
+                }
         }
     });
 

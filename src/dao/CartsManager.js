@@ -29,7 +29,7 @@ class CartsManager {
 
     async getCarritoById(cid){
         try {
-            return await cartsModelo.findById(cid).populate("products.productId"); //{_id:cid}
+            return await cartsModelo.findById(cid).populate("products.productId").lean(); //{_id:cid}
         } 
         catch(error){console.log(error, "Error en el getCarritoById")}
     }

@@ -8,13 +8,19 @@ const entorno = async () => {
     const productManager = new ProductManager();
     
     router.get("/", async(request, response) => {
-        let {limit} = request.query;
+        let {limit, page} = request.query;
+        if(page){
+            page = Number(page); 
+            if(isNaN(page)){
+                page = 1;
+            }
+        }
         if(limit){
             limit = Number(limit);
             if(!isNaN(limit)){
                 if(limit > 0){
                     try {
-                        let {docs:productos} = await productManager.getProducts(limit);
+                        let {docs:productos} = await productManager.getProducts(limit, page);
                         response.setHeader('Content-Type','application/json');
                         return response.status(200).json(productos);
                     } catch(error) {

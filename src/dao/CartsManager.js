@@ -34,13 +34,20 @@ class CartsManager {
         catch(error){console.log(error, "Error en el getCarritoById")}
     }
 
+    async getCarritoByIdNotPopulate(cid){
+        try {
+            return await cartsModelo.findById(cid).lean(); //{_id:cid}
+        } 
+        catch(error){console.log(error, "Error en el getCarritoById")}
+    }
+
     async updateCart(cid, update){
         try {
             //Ejemplo incrementar 1 {"$inc":{"stock": 1}}
-            return await cartsModelo.findByIdAndUpdate({"_id":cid},update,{runValidators:true, new:true, upsert:true});
+            return await cartsModelo.findByIdAndUpdate({"_id":cid}, update,{runValidators:true, new:true, upsert:true});
         }
         catch(error){
-            console.log(error, "Error desde updateCart");
+            console.log(error.message ,"Error desde updateCart");
         }
     }
 

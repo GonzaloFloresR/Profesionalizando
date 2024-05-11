@@ -85,6 +85,10 @@ const entorno = async() => {
         
     });
 
+
+
+
+
     router.put("/:cid", async(request, response) => {
         let products = request.body;
         let {cid} = request.params;  //[{productId:"x",quantity:1},{productId:"y",quantity:1},{productId:"z",quantity:1}]
@@ -98,47 +102,65 @@ const entorno = async() => {
         }
         // crear Array de pid´s recibidos para agregar
         let pids = products.map(produ => produ.productId);
-        
+        let carrito;
         try {
-            const carrito = await cartManager.getCarritoById({"_id":cid});
-            const ArrayCarrito = carrito.products;
-            
-            const productosPreExistentes = pids.filter(pidElement => {
-                return ArrayCarrito.some(produ => produ.productId._id == pidElement);
-            }); //recibo un array de los productos que deseo agregar y que ya existen en el carrito
-            if(productosPreExistentes == 0){
-                console.log(products,"Desde Linea 110");
-                let {...objetos} = products;
-                console.log({...objetos},"Desde Linea 112");
-                await cartManager.updateCart(cid,products);
-                
-                response.setHeader('Content-Type','application/json');
-                return response.status(200).json({status:"Productos Agregados"});
-            } else {
-                console.log("Estoy en linea 116");
-                response.setHeader('Content-Type','application/json');
-                response.status(400).json({status:"error", message:"El producto no se pudo agregar"})
-            }
+            carrito = await cartManager.getCarritoById({"_id":cid});
         }
         catch(error){console.log(error.message)}
-            /* //await productManager.updateProduct(pid, {"$inc":{"stock":-cantidad}});  //Funciona
-            let agregado = await cartManager.crearCarrito({products});
-            if(agregado){
-                response.setHeader('Content-Type','application/json');
-                return response.status(200).json(agregado);
-            } else {
-                
-            }
-        } 
-        catch(error){
-            console.log(error);
-            response.setHeader('Content-Type','application/json');
-            return response.status(500).json({
-                error:"Error inesperado en el servidor - intente más tarde",
-                detalle:`${error.message}`});
-        } */
         
+        const ArrayCarrito = carrito.products; //Tengo muchos datos
+
+        const productosPreExistentes = pids.filter(pidElement => {
+            return ArrayCarrito.some(produ => produ.productId._id == pidElement);
+        }); //recibo un array de los productos que deseo agregar y que ya existen en el carrito
+
+        if(productosPreExistentes == 0){
+            try {
+                let ProductosNormalizados = [];
+                for (const produ of products) {
+                    let produActual = await productManager.getProductBy({"_id": produ.productId}); 
+
+                    quantity = produ.quantity;
+                    ProductosNormalizados.push({"productId": produActual, "quantity": quantity});
+                }
+                let Updated = [...ArrayCarrito, ...ProductosNormalizados];                
+                let resuelto = await cartManager.updateCart(cid,{$set:{"products":Updated}});
+                if(resuelto){
+                    response.setHeader('Content-Type','application/json');
+                    return response.status(200).json({status:"Productos Agregados"});
+                } else {
+                    response.setHeader('Content-Type','application/json');
+                    response.status(400).json({status:"error", message:"El producto no se pudo agregar"})
+                }    
+            } catch(error){console.log(error);}            
+        } else {
+            console.log(ArrayCarrito," ArrayCarrito Desde 137");//Carrito en BD
+            for (const compra of products) {
+                const index = ArrayCarrito.findIndex(producto => compra.productId == producto.productId._id);
+                if (index !== -1) {
+                    // Producto encontrado, actualizamos la cantidad
+                    ArrayCarrito[index].quantity += compra.quantity;
+                } else {
+                    // Producto no encontrado, lo agregamos al carrito
+                    ArrayCarrito.push(compra);
+                }
+            }
+            try {
+                let resuelto = await cartManager.updateCart(cid,{$set:{"products":ArrayCarrito}});
+                if(resuelto){
+                    response.setHeader('Content-Type','application/json');
+                    return response.status(200).json({succes:"Productos agregado con existo"});
+                }
+            }
+            catch(error){error.message}
+        }
+        response.setHeader('Content-Type','application/json');
+        return response.status(400).json({error:"No se logro agregar los productos"});
     });
+
+
+
+
 
     router.put("/:cid/products/:pid", async(request, response) => {
         let {cid,pid }= request.params

@@ -9,12 +9,19 @@ const entorno = async () => {
     
     router.get("/", async(request, response) => {
         let {limit, page, sort} = request.query;
+        if(sort){
+            sort = Number(sort); 
+            if(isNaN(sort)){
+                sort = 1;
+            }
+        } sort = sort || 1;
+        console.log(sort, "Desde linea 18");
         if(page){
             page = Number(page); 
             if(isNaN(page)){
                 page = 1;
             }
-        }
+        } page = page || 1;
         if(limit){
             limit = Number(limit);
             if(!isNaN(limit)){
@@ -37,8 +44,9 @@ const entorno = async () => {
                 return response.status(400).json({error:"Los limites deben ser datos numericos"});
             }
         } else { // Si no existe limit
+            limit=10
             try { 
-                let {docs:productos} = await productManager.getProducts();
+                let {docs:productos} = await productManager.getProducts(limit,page, sort);
                 response.setHeader('Content-Type','application/json');
                 return response.status(200).json(productos);
             } catch(error){ 

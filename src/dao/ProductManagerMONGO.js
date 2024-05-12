@@ -2,10 +2,10 @@ const productoModelo = require("../dao/models/ProductModel");
 
 class ProductManagerMONGO{
 
-    async getProducts(limit=10,page=1, sort=1){
+    async getProducts(limit=10,page=1,sort=1){
         try {
             //return await productoModelo.find().limit(limit).lean();
-            return await productoModelo.paginate({},{limit, page, sort:{price:sort}, lean:true});
+            return await productoModelo.paginate({},{limit, page, sort:{"price":sort}, lean:true});
         }
         catch(error){
             console.log(error,"Error desde getProducts");

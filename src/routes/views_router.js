@@ -106,10 +106,10 @@ router.get("/products", async(req, res) => {
                 author:"Gonzalo Flores"
     }
     try { 
-        let {docs:productos} = await ProductManager.getProducts(limit,page);
+        let {docs:productos, ...pageInfo} = await ProductManager.getProducts(limit,page);
 
         res.setHeader("Content-Type","text/html");
-        return res.status(200).render("products",{productos, datos, carrito});
+        return res.status(200).render("products",{productos, datos, carrito, pageInfo});
     } catch(error){ 
         console.log(error.message);
         res.setHeader('Content-Type','application/json');

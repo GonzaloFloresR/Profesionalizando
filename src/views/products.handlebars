@@ -16,10 +16,16 @@
             {{/each}}
     </div>
 </div>
+<footer>
  {{#each carrito}}
     <input type="text" value="{{_id}}" id="carrito" hidden />
-
 <a href="/carrito/{{_id}}">Ir a Carrito</a>
 {{/each}}
+{{#if pageInfo.hasPrevPage}}<a href="http://localhost:8080/products?limit={{pageInfo.limit}}&page={{pageInfo.prevPage}}"> <<< Pag. Anterior</a> {{/if}}
+
+<h3>Pagina Actual {{pageInfo.page}}</h3>
+{{#if pageInfo.hasNextPage}}<a href="http://localhost:8080/products?limit={{pageInfo.limit}}&page={{pageInfo.nextPage}}">Próxima Pag.>>> </a>{{/if}}
+</footer>
+
 <script src="/js/productos.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

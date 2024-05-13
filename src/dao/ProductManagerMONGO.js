@@ -6,7 +6,7 @@ class ProductManagerMONGO {
         let filter;
         if(sort){ filter = "price"; } else {filter = "_id"; sort = 1;} 
         try {
-            return await productoModelo.paginate({},{limit, page, sort:{[filter]:sort}});
+            return await productoModelo.paginate({},{limit, page, sort:{[filter]:sort}, lean:true});
         }
         catch(error){
             console.log(error,"Error desde getProducts");

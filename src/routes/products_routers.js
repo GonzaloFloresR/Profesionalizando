@@ -14,7 +14,7 @@ const entorno = async () => {
             if(isNaN(sort)){
                 sort = 1;
             }
-        } sort = sort || 1;
+        } 
         console.log(sort, "Desde linea 18");
         if(page){
             page = Number(page); 
@@ -46,7 +46,7 @@ const entorno = async () => {
         } else { // Si no existe limit
             limit=10
             try { 
-                let {docs:productos} = await productManager.getProducts(limit,page, sort);
+                let {docs:productos} = await productManager.getProducts(limit,page,sort);
                 response.setHeader('Content-Type','application/json');
                 return response.status(200).json(productos);
             } catch(error){ 

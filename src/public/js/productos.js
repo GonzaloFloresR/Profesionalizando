@@ -17,5 +17,5 @@ const comprar = async(pid) => {
         });
         }
     } 
-    catch(error){error.menssage}
+    catch(error){error.menssage} 
 }

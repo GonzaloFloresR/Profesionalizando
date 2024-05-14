@@ -1,7 +1,7 @@
 {
-  "name": "require_exports",
+  "name": "Reajustando Autorización",
   "version": "1.0.0",
-  "description": "",
+  "description": "Actividad en Clase 19",
   "main": "./src/app.js",
   "scripts": {
     "start": "node ./src/app.js",
@@ -12,8 +12,10 @@
   "author": "Gonzalo Flores",
   "license": "ISC",
   "dependencies": {
+    "cookie-parser": "^1.4.6",
     "express": "^4.19.1",
     "express-handlebars": "^7.1.2",
+    "express-session": "^1.18.0",
     "mongodb": "^6.5.0",
     "mongoose": "^8.3.2",
     "mongoose-paginate-v2": "^1.8.0",

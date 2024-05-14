@@ -1,24 +1,29 @@
 const express = require("express");
+const session = require("express-session");
 const mongoose = require("mongoose");
 const path = require('path');
 const {engine} = require("express-handlebars");
-const {Server} = require("socket.io"); 
+const {Server} = require("socket.io");
+const cookieParser = require("cookie-parser"); 
 
 const mensajesModelo = require("./dao/models/MenssageModel.js");
 
 const productsRouter = require("./routes/products_routers.js");
 const cartRouter = require("./routes/carts_router.js");
 const vistasRouter = require("./routes/views_router.js");
+const sessionRouter = require("./routes/session_router.js");
 
 const PORT = 8080;
 const app = express();
 
 app.use(express.json()); 
-app.use(express.urlencoded({extended:true})); 
+app.use(express.urlencoded({extended:true}));
+app.use(cookieParser());
 
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname,'/views'));
+
 
 app.use(express.static(__dirname+'/public'));
 
@@ -31,6 +36,7 @@ app.use("/api/products/", (req, res, next) => {
 ); 
 app.use("/api/carts/", cartRouter);
 app.use("/", vistasRouter);
+app.use("/api/session/", sessionRouter);
 
 const serverHTTP = app.listen(PORT, () => console.log(`Server online en puerto ${PORT}`)); 
 const io = new Server(serverHTTP);

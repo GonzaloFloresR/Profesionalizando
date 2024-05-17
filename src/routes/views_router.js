@@ -4,10 +4,45 @@ const CartsManager = require("../dao/CartsManager.js"); //Agregado en After Clas
 const productManager = require("../dao/ProductManagerMONGO.js");
 const { isValidObjectId } = require("mongoose");
 const ProductManager = new productManager();
+const auth = require("../middleware/auth");
+
 
 const cartsManager = new CartsManager(); //Agregado en After Class
 
-router.get("/chat", (req, res) =>{
+router.get("/registro", (req, res) => {
+    datos = {       title:"Página de Registro de Usuarios",
+                    description:`Utilización de plantillas Handlebars y websocket
+                    Registro de usuarios con Session`,
+                    keywords:"Session, Cookies, Plantillas, handlebars, JS, Coderhouse, Cursos BackEnd",
+                    author:"Gonzalo Flores"
+                }
+    res.setHeader("Content-Type","text/html");
+    return res.status(200).render("regristro",{datos});
+});
+
+router.get("/login", (req, res) => {
+    datos = {       title:"Página de login de Usuarios",
+                    description:`Utilización de plantillas Handlebars y websocket login de usuarios con Session`,
+                    keywords:"Session, Cookies, Plantillas, handlebars, JS, Coderhouse, Cursos BackEnd",
+                    author:"Gonzalo Flores"
+                }
+    let {error} = req.query;
+    res.setHeader("Content-Type","text/html");
+    return res.status(200).render("login",{datos, error});
+});
+
+router.get("/perfil", auth, (req, res) => {
+    datos = {       title:"Página de Registro de Usuarios",
+                    description:`Utilización de plantillas Handlebars y websocket
+                    Registro de usuarios con Session`,
+                    keywords:"Session, Cookies, Plantillas, handlebars, JS, Coderhouse, Cursos BackEnd",
+                    author:"Gonzalo Flores"
+                }
+    res.setHeader("Content-Type","text/html");
+    return res.status(200).render("perfil",{datos, usuario: req.session.usuario});
+});
+
+router.get("/chat", (req, res) => {
     datos = {   title:"Bienvenido a mi Chat - Hecho con WebSocket 2024 GFR",
                     nombre:"Gonzalo",
                     description:`Utilización de plantillas Handlebars y websocket
@@ -84,7 +119,7 @@ router.get("/realtimeproducts", async(req, res) => {
 });
 
 router.get("/products", async(req, res) => {
-    let {limit, page} = req.query;
+    let {limit, page, mensaje} = req.query;
     if(page){
         page = Number(page); 
         if(isNaN(page)){
@@ -109,7 +144,7 @@ router.get("/products", async(req, res) => {
         let {docs:productos, ...pageInfo} = await ProductManager.getProducts(limit,page);
 
         res.setHeader("Content-Type","text/html");
-        return res.status(200).render("products",{productos, datos, carrito, pageInfo});
+        return res.status(200).render("products",{productos, datos, carrito, pageInfo, mensaje});
     } catch(error){ 
         console.log(error.message);
         res.setHeader('Content-Type','application/json');

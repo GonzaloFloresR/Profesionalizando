@@ -4,16 +4,138 @@
     box-sizing: border-box;
 }
 body {
+    width: 100%;
     font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 62.5%;
+}
+
+h1 {
+    line-height: 6vh;
+    color: white;
+    text-align: center;
+    margin: 2vh auto;
+    padding: 0px 25px;
+    font-size: clamp(1.5rem,2vw, 2.25rem);
+    background-color: rgba(3, 3, 3, 0.5)
+}
+
+h2 {
+    line-height: 30px;
+    color: white;
+    text-align: center;
+}
+
+h3 {
+    background-color: rgb(202, 202, 202);
+    display: block;
+    border-radius: 5px;
     font-size: 16px;
+    line-height: 32px;
+}
+
+a {
+    text-decoration: none;
+}
+
+ul {
+    list-style: none;
+}
+
+header {
+    width: 100%;
+    height: auto;
+    margin: 0px;
+    padding: 0px;
+    border-bottom: 3vh solid black;
+    display: block;
+    overflow: hidden;
+    background-color: #2e2d2d;
+}
+
+#PreHeader {
+    width: 100%;
+    height: 30px;
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    justify-content: end;
+    overflow: hidden;
+    background-color: white;
+}
+
+header ul, footer ul {
+    margin: 0px;
+    display: flex;
+    flex-direction: row;
+}
+
+#PreHeader ul {
+    width: auto;
+    height: auto;
+    margin: 0px;
+    padding: 0px;
+}
+
+#PreHeader ul li a {
+    width: 120px;
+    line-height: 30px;
+    font-size: 0.85rem;
+    padding: 0px 10px;
+    margin: 0px;
+    display: block;
+    border-left: 1px solid black;
+    color: black;
+    text-align: center;
+}
+
+#PreHeader ul li:first-child a, footer ul li:first-child a, #MenuHeader ul li:first-child a {
+    border-left:none;
+}
+
+#PreHeader ul li a:hover, footer ul li a:hover, #MenuHeader ul li a:hover {
+    background-color: rgba(145, 145, 145, 0.48);
+}
+
+#LogoHeader {
+    width: 200px;
+    line-height: 7vh;
+    margin: 3vh 30px;
+    color: white;
+    font-weight: 800;
+    font-size: 1.5rem;
+    background-color: cadetblue;
+    text-align: center;
+    border-radius: 30px;
+}
+
+#MainHeader {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    height: 13vh;
+}
+
+#MenuHeader ul {
+    margin: 0px 30px;
+}
+
+#MenuHeader ul li a, footer ul li a {
+    width: 100px;
+    line-height: 13vh;
+    margin:0px;
+    padding:5px 10px;
+    font-size: 1.2rem;
+    text-decoration: none;
+    color: white;
+    border-left: 1px solid white;
 }
 
 #container {
     width: 100%;
-    height: 74vh;
+    height: 65vh;
     overflow: hidden;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     padding: 0px;
     margin: 0px;
@@ -26,31 +148,99 @@ body {
 
 footer {
     width: 100%;
-    height: 13vh;
-    line-height: 10vh;
+    height: 18vh;
     border-top: 3vh solid black;
     display: flex;
+    flex-direction: column;
     background-color: #2e2d2d;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+footer ul {
+    height: 15vh;
+    overflow: hidden;
+}
+
+footer a {
+    width: 16%;
+    height: 2vh;
+    font-size: 1.2rem;
     color: white;
     text-align: center;
-    align-items: center;
-    flex-direction: row;
+    line-height: 2vh;
+    margin: 10px 37%;
+}
+
+.formSession {
+    width: 600px;
+}
+
+#perfil {
+    width:600px;
+    margin: 20px auto;
+    padding: 25px 25px;
+    display: block;
+    background-color: antiquewhite;
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.7);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.7);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.7);
+}
+
+#perfil h2 {
+    font-size: 1.4rem;
+    line-height: 40px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    margin-bottom: 30px;
+}
+
+.espaciado p {
+    width: 100%;
+    line-height: 50px;
+    font-size: 1.2rem;
+    border-bottom: 1px dotted gray;
 }
 
 #formulario {
     width: 600px;
     height: auto;
-    overflow: hidden;
+    overflow-y:scroll;
     margin: 0px auto;
     display: block;
     background-color: navajowhite;
-    box-shadow: 0px 0px 5px 1px black ;
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.7);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.7);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.7);
+    border-radius: 10px;
 }
 
+.error {
+    font-size: 1.5rem;
+    line-height: 40px;
+    margin-left: 5%;
+    width: 90%;
+    color: rgb(255, 2, 2);
+    text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.8);
+    background-color: black;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#PaginaActual {
+    width: 50px;
+    padding: 0px;
+    margin: 5vh 0px;
+    line-height: 3vh;
+    font-weight: 600;
+    font-size: 1.2rem;
+    text-align: center;
+} 
+
 form textarea, form input {
-    width: 96%;
-    display: flex;
-    margin: 5px 2% 20px;
+    width: 90%;
+    margin: 5px 5% 20px;
     border: 2px solid rgb(52, 52, 94);
     border-radius: 10px;
     padding-left:15px;
@@ -89,10 +279,10 @@ input[type='file'] {
 label { 
     display: block;
     text-align: left;
-    width: 96%;
-    margin: 0px 0px 0px 30px;
+    margin: 10px 0px 0px 30px;
     font-weight: 600;
-    color: white;
+    color: black;
+    font-size: 0.9rem;
 }
 
 #lista, #productos {
@@ -102,79 +292,38 @@ label {
     flex-wrap: nowrap;
     overflow-x: scroll;
     overflow-y: hidden;
+    justify-content:  space-around;
 }
 
-h1 {
-    width: 100%;
-    height: 13vh;
-    line-height: 10vh;
-    border-bottom: 3vh solid black;
-    display: block;
-    background-color: #2e2d2d;
-    color: white;
-    text-align: center;
-    margin: 0px auto;
-    font-size: clamp(1.5rem,2vw, 2.25rem);
-}
-h2 {
-    line-height: 30px;
-    color: white;
-    text-align: center;
-}
-
-h3 {
-    background-color: rgb(202, 202, 202);
-    display: block;
-    border-radius: 5px;
-    font-size: 16px;
-    line-height: 32px;
-}
-
-ul {
+#productos ul {
     display: flex;
     flex-direction: column;
     width: 20%;
     min-width: 280px;
     height: auto;
     margin: 20px 10px;
-    box-shadow: 0px 0px 5px black;
     padding: 15px;
-    border-radius: 5px;
     background-color: white;
     justify-content: space-around;
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.7);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.7);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.7);
 }
 
-ul li {
+#productos ul li {
     text-align: center;
-    list-style: none;
     width: 100%;
-    line-height: 20px;
+    line-height: 15px;
     margin: 5px 0px;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-}
+    font-size: 0.85rem;
+} 
 
-ul li img {
-    max-height: 220px;
+#productos ul li img {
+    max-height: 210px;
     border-radius: 10%;
-}
-
-a {
-    width: 150px;
-    height: auto;
-    line-height: 40px;
-    text-decoration: none;
-    font-weight: 800;
-    color: white;
-    display: block;
-    background-color: grey;
-    text-align: center;
-    margin: 10px auto;
-}
-
-.codigo {
-    font-size: 10px;
 }
 
 .comprar {
@@ -188,36 +337,25 @@ a {
     background-color: rgb(25, 103, 182);
 }
 
-footer {
-    width: 100%;
-    height: 13vh;
-    display: flex;
-    justify-content: center;
-    border-top: 3vh solid black;
-    background-color: #2e2d2d;
-    color: white;
-    text-align: center;
-    margin: 0px auto;
-}
-
 #chat {
     width: 80%;
     min-width: 600px;
     height: 90%;
-    /* min-height: 400px; */
-    margin:0 auto;
+    margin:auto;
     background-color: white;
     -webkit-box-shadow: 0px 0px 5px 0px black;
     -moz-box-shadow: 0px 0px 5px 0px black;
     box-shadow: 0px 0px 5px 0px black;
     overflow: hidden;
     position: relative;
+    font-size: 1rem;
 }
 
 #chat h2 {
     width: 100%;
     height: 10%;
     background-color: black;
+    font-size: 1.3rem;
 }
 
 #chat label {
@@ -273,22 +411,21 @@ footer {
 /* width */
 ::-webkit-scrollbar {
     width: 10px;
-  }
-  
-  /* Track */
-  ::-webkit-scrollbar-track {
+}
+
+/* Track */
+::-webkit-scrollbar-track {
     box-shadow: inset 0 0 5px grey; 
     border-radius: 5px;
-  }
-   
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: red; 
-    border-radius: 10px;
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: #b30000; 
-  }
+}
 
+ /* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 0, 0, 0.5); 
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background:  rgba(255, 0, 0, 0.5); 
+}

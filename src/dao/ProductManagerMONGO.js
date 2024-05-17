@@ -16,7 +16,8 @@ class ProductManagerMONGO {
 
     async addProduct(nuevoProducto){ 
         try {
-                return await productoModelo.create(nuevoProducto);
+                let ProductoNuevo =  await productoModelo.create(nuevoProducto);
+                return ProductoNuevo.toJSON();
             }
         catch(error){
                 console.log(error,"Error desde addProduct");

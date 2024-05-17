@@ -1,16 +1,30 @@
-<h1>Su carrito ID : {{carrito._id}}</h1>
-<div id="container">
-    <div id="productos">
-        
-        {{#each carrito.products}}
-        <ul>
-            <li><h3>{{productId.title}}</h3></li>
-            <li><img src={{productId.thumbnail}} /></li>
-            <li><h4>Price: ${{productId.price}}</h4></li>
-            <li>Cantidad :{{quantity}}</li>
-        </ul>
-        {{/each}}
+<header>
+    <div id="PreHeader">
+        {{> submenu}}
     </div>
-</div>
-<a href="/products">Seguir Comprando</a>
+    <div id="MainHeader">
+        <div id="LogoHeader">Lista del Sol</div>
+        <div id="MenuHeader">{{>menu}}</div>
+    </div>
+</header>
+<main>
+    <div id="container">
+        <div id="productos">
+            
+            {{#each carrito.products}}
+                <ul>
+                    <li><h3>{{productId.title}}</h3></li>
+                    <li><img src={{productId.thumbnail}} /></li>
+                    <li><h4>Price: ${{productId.price}}</h4></li>
+                    <li>Cantidad :{{quantity}}</li>
+                </ul>
+            {{/each}}
+        </div>
+    </div>
+</main>
+<footer>
+    <ul>
+        <li><a href="/products">Seguir Comprando</a></li>
+    </ul>
+</footer>
 

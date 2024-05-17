@@ -1,4 +1,5 @@
 const multer = require("multer");
+const crypto = require("crypto");
 
 const storage = multer.diskStorage({
     destination:(request, file, cb) => {
@@ -9,5 +10,9 @@ const storage = multer.diskStorage({
     }
 });
 
+const SECRET = "CoderCoder123";
+const generaHash = password => crypto.createHmac("sha256", SECRET).update(password).digest("hex");
+
 const uploader = multer({storage: storage});
-module.exports = uploader;
+
+module.exports = {uploader, generaHash};

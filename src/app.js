@@ -18,6 +18,7 @@ const app = express();
 
 app.use(express.json()); 
 app.use(express.urlencoded({extended:true}));
+app.use(session({secret:"CoderCoder123", resave:true, saveUninitialized:true}));
 app.use(cookieParser());
 
 app.engine('handlebars', engine());
@@ -36,7 +37,7 @@ app.use("/api/products/", (req, res, next) => {
 ); 
 app.use("/api/carts/", cartRouter);
 app.use("/", vistasRouter);
-app.use("/api/session/", sessionRouter);
+app.use("/api/sessions/", sessionRouter);
 
 const serverHTTP = app.listen(PORT, () => console.log(`Server online en puerto ${PORT}`)); 
 const io = new Server(serverHTTP);

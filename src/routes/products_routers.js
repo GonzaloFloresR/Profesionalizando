@@ -1,7 +1,7 @@
 const Router = require("express").Router;
 const router = Router();
 const ProductManager = require("../dao/ProductManagerMONGO.js");
-const uploader = require("../utils.js");
+const uploader = require("../utils.js").uploader;
 const {isValidObjectId} = require("mongoose");
 
 const entorno = async () => {
@@ -96,7 +96,6 @@ const entorno = async () => {
         if (request.file){
             thumbnail = request.file.path;
         }
-        
         let existe;
         if(!title || !description || !price || !code || !stock){
             response.setHeader('Content-Type','application/json');
@@ -120,8 +119,9 @@ const entorno = async () => {
             }   
             if(!existe){ 
                 if (thumbnail){
-                    thumbnail = thumbnail.replace("/Applications/MAMP/htdocs/ClaseBackend/Desafio5/src/public", "..");
+                    thumbnail = "../"+(thumbnail.split("public/")[1]);
                 }  
+                console.log(thumbnail,"Desde linea 124")
                 let nuevoProducto = {
                     title:title,
                     description:description,

@@ -8,7 +8,7 @@ const productosEsquema = new mongoose.Schema({
     price: Number,
     thumbnail: String,
     code: {type: String, unique: true, required:true},
-    stock: Number
+    stock: {type: Number, default:0}
 },{
     timestamps:true
 });

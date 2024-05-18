@@ -9,26 +9,37 @@ const auth = require("../middleware/auth.js");
 
 const cartsManager = new CartsManager(); //Agregado en After Class
 
-router.get("/registro", (req, res) => {
+router.get("/registro", (req, res, next)=>{
+    if(req.session.usuario){
+        return res.redirect("/perfil");
+    }
+    next();
+},(req, res) => {
     datos = {       title:"Página de Registro de Usuarios",
                     description:`Utilización de plantillas Handlebars y websocket
                     Registro de usuarios con Session`,
                     keywords:"Session, Cookies, Plantillas, handlebars, JS, Coderhouse, Cursos BackEnd",
                     author:"Gonzalo Flores"
                 }
+    let {error} = req.query;
     res.setHeader("Content-Type","text/html");
-    return res.status(200).render("regristro",{datos});
+    return res.status(200).render("regristro",{datos, error, login:req.session.usuario});
 });
 
-router.get("/login", (req, res) => {
+router.get("/login",(req, res, next)=>{
+    if(req.session.usuario){
+        return res.redirect("/perfil");
+    }
+    next();
+} ,(req, res) => {
     datos = {       title:"Página de login de Usuarios",
                     description:`Utilización de plantillas Handlebars y websocket login de usuarios con Session`,
                     keywords:"Session, Cookies, Plantillas, handlebars, JS, Coderhouse, Cursos BackEnd",
                     author:"Gonzalo Flores"
                 }
-    let {error} = req.query;
+    let {error, message} = req.query;
     res.setHeader("Content-Type","text/html");
-    return res.status(200).render("login",{datos, error});
+    return res.status(200).render("login",{datos, error, message, login:req.session.usuario});
 });
 
 router.get("/perfil", auth, (req, res) => {
@@ -39,7 +50,7 @@ router.get("/perfil", auth, (req, res) => {
                     author:"Gonzalo Flores"
                 }
     res.setHeader("Content-Type","text/html");
-    return res.status(200).render("perfil",{datos, usuario: req.session.usuario});
+    return res.status(200).render("perfil",{datos, usuario: req.session.usuario, login:req.session.usuario});
 });
 
 router.get("/chat", (req, res) => {
@@ -51,7 +62,7 @@ router.get("/chat", (req, res) => {
                     author:"Gonzalo Flores"
                 }
     res.setHeader("Content-Type","text/html");
-    return res.status(200).render("chat",{datos});
+    return res.status(200).render("chat",{datos, login:req.session.usuario});
 });
 
 router.get("/home", async(req, res) => {
@@ -66,7 +77,7 @@ router.get("/home", async(req, res) => {
                 author:"Gonzalo Flores"
             };
             res.setHeader("Content-Type","text/html");
-            return res.status(200).render("home",{productos, datos});
+            return res.status(200).render("home",{productos, datos, login:req.session.usuario});
         } catch(error){ 
             console.log(error);
             res.setHeader('Content-Type','application/json');
@@ -87,7 +98,7 @@ router.get("/home", async(req, res) => {
             try {
                 producto = await ProductManager.getProductBy({_id:id});
                 res.setHeader("Content-Type","text/html");
-            return res.status(200).render("home",{producto, datos, id});
+            return res.status(200).render("home",{producto, datos, id, login:req.session.usuario});
             } 
             catch (error){
                 console.log(error);
@@ -110,7 +121,7 @@ router.get("/realtimeproducts", async(req, res) => {
         //let productos = await ProductManager.getProducts();
         let {docs:productos} = await ProductManager.getProducts(20,1);
         res.setHeader("Content-Type","text/html");
-        return res.status(200).render("realTimeProducts",{productos, datos});
+        return res.status(200).render("realTimeProducts",{productos, datos, login:req.session.usuario});
     } catch(error){ 
         console.log(error);
         res.setHeader('Content-Type','application/json');
@@ -144,7 +155,7 @@ router.get("/products", auth, async(req, res) => {
         let {docs:productos, ...pageInfo} = await ProductManager.getProducts(limit,page);
 
         res.setHeader("Content-Type","text/html");
-        return res.status(200).render("products",{productos, datos, pageInfo, mensaje, carrito});
+        return res.status(200).render("products",{productos, datos, pageInfo, mensaje, carrito,login:req.session.usuario});
     } catch(error){ 
         console.log(error.message);
         res.setHeader('Content-Type','application/json');
@@ -168,7 +179,7 @@ router.get("/carrito/:cid", auth, async(req, res) => {
         let carrito = await cartsManager.getCarritoById({_id:cid});
 
         res.setHeader("Content-Type","text/html");
-        return res.status(200).render("carrito",{carrito, datos});
+        return res.status(200).render("carrito",{carrito, datos, login:req.session.usuario});
     } catch(error){ 
         console.log(error.message);
         res.setHeader('Content-Type','application/json');

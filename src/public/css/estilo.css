@@ -215,17 +215,24 @@ footer a {
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.7);
     border-radius: 10px;
 }
-
-.error {
-    font-size: 1.5rem;
+.succes, .error {
+    width: 600px;
+    font-weight: 900;
     line-height: 40px;
-    margin-left: 5%;
-    width: 90%;
-    color: rgb(255, 2, 2);
-    text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.8);
-    background-color: black;
+    text-shadow: 0px 0px 1px rgba(0, 0, 0, 0.8);
     border-radius: 10px;
     text-align: center;
+    background-color: white;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+}
+.succes {
+    color: rgb(35, 181, 35);
+    
+}
+
+.error {
+    color: rgb(255, 2, 2);
 }
 
 #PaginaActual {

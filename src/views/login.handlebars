@@ -15,9 +15,11 @@
         <form class="formSession" action="/api/sessions/login" method="post">
         {{#if error}}
             <div class="error">{{error}}</div>
+            {{else if message}}
+            <div class="succes">{{message}}</div>
         {{/if}}
-            <input type="email" name="usuario">
-            <input type="password" name="password" >
+            <input type="email" name="usuario" placeholder="Correo Electrónico">
+            <input type="password" name="password" placeholder="Password" >
             <input type="text" name="web" value="web" hidden>
             <input type="submit" value="Ingresar">
         </form>

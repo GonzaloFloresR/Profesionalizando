@@ -8,17 +8,28 @@ const cartsManagar =new CartsManager();
 const auth = require("../middleware/auth.js");
 
 router.post("/registro", async (req, res) => {
-    let {nombre:first_name, apellido:last_name, edad:age, email, password, rol} = req.body;
+    let {nombre:first_name, apellido:last_name, edad:age, email, password, rol, web} = req.body;
     if(!first_name || !email || !password){
-        res.setHeader("Content-Type","application/json");
+        if(web){
+            return res.redirect("/registro?error=Faltan datos para el correcto registro");
+        }
+        else {
+            res.setHeader("Content-Type","application/json");
         return res.status(400).json({error:"Faltan datos para el correcto registro de usuario"});
+        }
+        
     }
     
     try {
         let emailCheck = await usuarioManager.getUsuarioBy({email});
         if(emailCheck){
-            res.setHeader("Content-Type","application/json");
-            return res.status(400).json({error:`Ya existe usuario con ${email}`});
+            if(web){
+                return res.redirect(`/registro?error=Ya existe usuario con ${email}`);
+            }
+            else {
+                res.setHeader("Content-Type","application/json");
+                return res.status(400).json({error:`Ya existe usuario con ${email}`});
+            }
         }
     } catch(error){
         console.log(error);
@@ -33,8 +44,13 @@ router.post("/registro", async (req, res) => {
         if(nuevoUsuario){
             nuevoUsuario = {...nuevoUsuario}
             delete nuevoUsuario.password;
-            res.setHeader('Content-Type','application/json');
-            res.status(200).json({message: "Registro correcto...!!!", nuevoUsuario});
+            if(web){
+                return res.redirect(`/login?message=Registro exitoso ${nuevoUsuario.first_name}`);
+            }
+            else {
+                res.setHeader('Content-Type','application/json');
+                res.status(200).json({message: "Registro correcto...!!!", nuevoUsuario});
+            }
         }
     } catch(error){
         console.log(error.message);

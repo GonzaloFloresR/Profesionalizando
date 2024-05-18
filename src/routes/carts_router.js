@@ -1,8 +1,9 @@
-const Router = require("express");
+const { Router }= require("express");
 const router = Router();
 const CartsManager = require("../dao/CartsManager.js");
 const ProductManager = require("../dao/ProductManagerMONGO.js");
 const {isValidObjectId} = require("mongoose");
+const auth = require("../middleware/auth.js");
 
 
 const entorno = async() => { 
@@ -162,7 +163,7 @@ const entorno = async() => {
 
 
 
-    router.put("/:cid/products/:pid", async(request, response) => {
+    router.put("/:cid/products/:pid", auth, async(request, response) => {
         let {cid,pid }= request.params
         let cantidad = request.body;
         if(!cantidad || typeof cantidad != Number){

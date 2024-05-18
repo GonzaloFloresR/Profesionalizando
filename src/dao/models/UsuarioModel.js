@@ -8,7 +8,8 @@ const usuarioEsquema = new mongoose.Schema({
     email:{type:String, unique:true},
     age: Number,
     password: {type: String, unique: true, required:true},
-    rol: String
+    rol: {type: String, default:"user"},
+    cart: {type: mongoose.Types.ObjectId, ref:"carts"}
 },{
     timestamps:true
 });

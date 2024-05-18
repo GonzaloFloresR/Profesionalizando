@@ -1,8 +1,9 @@
-const Router = require("express").Router;
+const { Router } = require("express");
 const router = Router();
 const ProductManager = require("../dao/ProductManagerMONGO.js");
 const uploader = require("../utils.js").uploader;
 const {isValidObjectId} = require("mongoose");
+const auth = require("../middleware/auth.js");
 
 const entorno = async () => {
     const productManager = new ProductManager();
@@ -89,7 +90,7 @@ const entorno = async () => {
         }
     });
     
-    router.post("/", uploader.single('thumbnail'), async(request, response) => {
+    router.post("/", uploader.single('thumbnail'), auth, async(request, response) => {
         //Recuperar todos los datos desde el cuerpo de la consulta
         let {title,description,price,thumbnail,code,stock} = request.body;
         //Verificar Si recibimos imagenenes
@@ -121,7 +122,6 @@ const entorno = async () => {
                 if (thumbnail){
                     thumbnail = "../"+(thumbnail.split("public/")[1]);
                 }  
-                console.log(thumbnail,"Desde linea 124")
                 let nuevoProducto = {
                     title:title,
                     description:description,
@@ -185,7 +185,7 @@ const entorno = async () => {
         return res.status(400).json({error:`Debe ingresar el ID del producto a modificar`});
     });
 
-    router.put("/:pid", async(request, response) => {
+    router.put("/:pid", auth,async(request, response) => {
         //Debería verificar que al menos modifique una propiedad.
         let {pid} = request.params;
             let producto;
@@ -267,7 +267,7 @@ const entorno = async () => {
         return response.status(400).json({error:`Debe ingresar el ID del producto a eliminar`});
     });
 
-    router.delete("/:pid", async(request, response) => {
+    router.delete("/:pid", auth,async(request, response) => {
         let pid = request.params.pid;
 
             if(!isValidObjectId(pid)){

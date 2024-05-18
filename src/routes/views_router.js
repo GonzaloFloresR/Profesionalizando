@@ -1,10 +1,10 @@
-const Router = require("express").Router;
+const { Router } = require("express");
 const router = Router();
 const CartsManager = require("../dao/CartsManager.js"); //Agregado en After Class
 const productManager = require("../dao/ProductManagerMONGO.js");
 const { isValidObjectId } = require("mongoose");
 const ProductManager = new productManager();
-const auth = require("../middleware/auth");
+const auth = require("../middleware/auth.js");
 
 
 const cartsManager = new CartsManager(); //Agregado en After Class
@@ -118,7 +118,7 @@ router.get("/realtimeproducts", async(req, res) => {
     }
 });
 
-router.get("/products", async(req, res) => {
+router.get("/products", auth, async(req, res) => {
     let {limit, page, mensaje} = req.query;
     if(page){
         page = Number(page); 
@@ -132,8 +132,8 @@ router.get("/products", async(req, res) => {
             limit = 10;
         }
     }
-    let carrito = await cartsManager.getCarritos(1); //recibo array con un producto
-    
+    let carrito = req.session.usuario.cart;
+
     datos = {   title:"Bienvenido a mi primera plantilla Handlebars 2024 JS",
                 nombre:"Gonzalo",
                 description:"Utilización de plantillas Handlebars en el curso de bankEnd de CoderHouse",
@@ -144,7 +144,7 @@ router.get("/products", async(req, res) => {
         let {docs:productos, ...pageInfo} = await ProductManager.getProducts(limit,page);
 
         res.setHeader("Content-Type","text/html");
-        return res.status(200).render("products",{productos, datos, carrito, pageInfo, mensaje});
+        return res.status(200).render("products",{productos, datos, pageInfo, mensaje, carrito});
     } catch(error){ 
         console.log(error.message);
         res.setHeader('Content-Type','application/json');
@@ -152,7 +152,7 @@ router.get("/products", async(req, res) => {
     }
 });
 
-router.get("/carrito/:cid", async(req, res) => {
+router.get("/carrito/:cid", auth, async(req, res) => {
     let {cid} = req.params;
     if(!isValidObjectId(cid)){
         res.setHeader('Content-Type','application/json');
@@ -166,6 +166,7 @@ router.get("/carrito/:cid", async(req, res) => {
     }
     try { 
         let carrito = await cartsManager.getCarritoById({_id:cid});
+
         res.setHeader("Content-Type","text/html");
         return res.status(200).render("carrito",{carrito, datos});
     } catch(error){ 

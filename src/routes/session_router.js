@@ -1,13 +1,14 @@
 const { Router } = require("express");
-const auth = require("../middleware/auth.js");
 const router = Router();
 const UsuarioManager = require("../dao/UsersManager.js");
 const { generaHash } = require("../utils.js");
-
+const CartsManager = require("../dao/CartsManager.js");
 const usuarioManager = new UsuarioManager();
+const cartsManagar =new CartsManager();
+const auth = require("../middleware/auth.js");
 
 router.post("/registro", async (req, res) => {
-    let {nombre:first_name, apellido:last_name, edad:age, email, password} = req.body;
+    let {nombre:first_name, apellido:last_name, edad:age, email, password, rol} = req.body;
     if(!first_name || !email || !password){
         res.setHeader("Content-Type","application/json");
         return res.status(400).json({error:"Faltan datos para el correcto registro de usuario"});
@@ -24,11 +25,14 @@ router.post("/registro", async (req, res) => {
         res.setHeader("Content-Type","application/json");
         return res.status(500).json({error:`Error inesperado en el servidor`});
     }
-    password = generaHash(password);
-    let usuario = {first_name,last_name,age, email, password, rol:"usuario"};
     try {
+    let cart = await cartsManagar.crearCarrito();
+    password = generaHash(password);
+    let usuario = {first_name,last_name,age, email, password, rol, cart};
         let nuevoUsuario = await usuarioManager.createUsuario(usuario);
         if(nuevoUsuario){
+            nuevoUsuario = {...nuevoUsuario}
+            delete nuevoUsuario.password;
             res.setHeader('Content-Type','application/json');
             res.status(200).json({message: "Registro correcto...!!!", nuevoUsuario});
         }
